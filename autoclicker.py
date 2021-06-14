@@ -1,4 +1,5 @@
 import threading, pyautogui, tkinter, time, sys
+from tkinter import messagebox
 
 threads = []
 thread_count = 10
@@ -31,21 +32,27 @@ def startThreads(thread_count, threads):
         threads[i].start()
 
 def mainProgram():
-    global threads
-    global thread_count
-    thread_count = int(threads_entry.get())
-    if (len(threads)) == 0:
-        createThreads(thread_count, threads)    
-    else:
-        resetThreads(thread_count, threads)
-    time.sleep(int(time_entry.get())) # will wait three seconds so it doesnt spam start
-    startThreads(thread_count, threads)               
+    try:
+        global threads
+        global thread_count
+        thread_count = int(threads_entry.get())
+        if (len(threads)) == 0:
+            createThreads(thread_count, threads)    
+        else:
+            resetThreads(thread_count, threads)
+    except ValueError:
+        messagebox.showerror("CPS Error", "Enter Only Integer Not string!")
+    try:
+        time.sleep(int(time_entry.get()))
+    except ValueError:
+        messagebox.showerror("Time Error", "Enter Only Integer Not string!")
+    startThreads(thread_count, threads)
 
 root = tkinter.Tk()
 root.geometry("300x200")
 root.resizable(False, False)
 
-w = tkinter.Label(root, text="Enter time to wait before clicking")
+w = tkinter.Label(root, text="Enter time in seconds to wait before clicking")
 w.pack()
 
 time_entry = tkinter.Entry(root)
@@ -60,11 +67,11 @@ threads_entry.pack()
 start_button = tkinter.Button(root, text="START?", command=mainProgram)
 start_button.pack()
 
-stop_button = tkinter.Button(root, text="STOP? (use esc key optional)", command=killThreads, padx=1)
-stop_button.pack()
-
 def close(event):
     sys.exit()
+
+stop_button = tkinter.Button(root, text="STOP? (use esc key optional)", command=close, padx=1)
+stop_button.pack()
 
 root.bind('<Escape>', close)
 
