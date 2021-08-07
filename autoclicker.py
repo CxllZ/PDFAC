@@ -1,6 +1,5 @@
-import threading, pyautogui, tkinter, time, sys
+import threading, pyautogui, tkinter, time
 from tkinter import messagebox
-from pynput.keyboard import Key, Listener
 
 threads = []
 thread_count = 10
@@ -48,17 +47,6 @@ def mainProgram():
     except ValueError:
         messagebox.showerror("Time Error", "Enter Only Integer Not string!")
     startThreads(thread_count, threads)
-
-def on_release(key):
-    if key == Key.esc:
-        exit()
-
-def logger():
-    with Listener(on_release=on_release) as listener:
-        listener.join()
-
-log_thread = threading.Thread(target=logger)
-log_thread.start()
 
 root = tkinter.Tk()
 root.geometry("300x160")
